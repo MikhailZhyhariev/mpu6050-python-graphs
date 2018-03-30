@@ -8,11 +8,10 @@
 #include <wiringPiI2C.h>
 
 /**
- * Initialise and set the settings MPU6050
- * @return  [fd] - pointer on device file
+ * [Initialise and set the settings MPU6050]
+ * @return  [pointer on device file]
  */
 int MPU6050_Init(void) {
-
     int fd = wiringPiI2CSetupInterface(MPU6050, 0x68);
 
     //Sets sample rate to 8000/1+7 = 1000Hz
@@ -114,22 +113,22 @@ void MPU6050_getTemp(mpu6050 *mpu6050) {
 }
 
 /**
- * Getting a value of accelerometer registers MPU6050
+ * Getting a values of accelerometer registers MPU6050
  * @param mpu6050 - structure that containing all measured variables
  */
 void MPU6050_getAccel(mpu6050 *mpu6050) {
-    // Getting value of accelerometer registers for X, Y and Z axises
+    // Getting values of accelerometer registers for X, Y and Z axises
     mpu6050->accel_x = wiringPiI2CReadReg16(mpu6050->fd, ACCEL_XOUT_H);
     mpu6050->accel_y = wiringPiI2CReadReg16(mpu6050->fd, ACCEL_YOUT_H);
     mpu6050->accel_z = wiringPiI2CReadReg16(mpu6050->fd, ACCEL_ZOUT_H);
 }
 
 /**
- * Getting a value of gyroscope registers MPU6050
+ * Getting a values of gyroscope registers MPU6050
  * @param mpu6050 - structure that containing all measured variables
  */
 void MPU6050_getGyro(mpu6050 *mpu6050) {
-    // Getting value of gyroscope registers for X, Y and Z axises
+    // Getting values of gyroscope registers for X, Y and Z axises
     mpu6050->gyro_x = wiringPiI2CReadReg16(mpu6050->fd, GYRO_XOUT_H);
     mpu6050->gyro_y = wiringPiI2CReadReg16(mpu6050->fd, GYRO_YOUT_H);
     mpu6050->gyro_z = wiringPiI2CReadReg16(mpu6050->fd, GYRO_ZOUT_H);
