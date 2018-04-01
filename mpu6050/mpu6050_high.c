@@ -6,7 +6,7 @@
 #include "mpu6050.h"
 
 /**
- * [Computing the temperature in degrees Celsius]
+ * Computing the temperature in degrees Celsius
  * @param mpu6050 - structure that containing all measured variables
  */
 void MPU6050_countTemp(mpu6050 *mpu6050) {

@@ -1,4 +1,4 @@
-/* Name: main.c
+/* Name: mpu6050-wrapper.c
  * Author: Zhyhariev Mikhail
  * License: MIT
  */
@@ -11,10 +11,10 @@
 mpu6050 mpu;
 
 /**
- * [Making list from array]
- * @param  arr    [array]
- * @param  length [array length]
- * @return        [python list that containing an array values]
+ * Making list from array
+ * @param  arr    - array
+ * @param  length - array length
+ * @return        python list that containing an array values
  */
 static PyObject* _makeList(unsigned int *arr, unsigned char length) {
     // Create new Python list
@@ -32,10 +32,10 @@ static PyObject* _makeList(unsigned int *arr, unsigned char length) {
 }
 
 /**
- * [Initialise and set the settings MPU6050]
- * @param  self [instance]
- * @param  args [function arguments]
- * @return      [NONE]
+ * Initialise and set the settings MPU6050
+ * @param  self - instance
+ * @param  args - function arguments
+ * @return        NONE
  */
 static PyObject* init(PyObject* self, PyObject* args) {
     // Initialise wiringPi
@@ -49,9 +49,9 @@ static PyObject* init(PyObject* self, PyObject* args) {
 
 /**
  * [Returning a value of "whoAmI" register MPU6050]
- * @param  self [instance]
- * @param  args [function arguments]
- * @return      ["whoAmI" register value]
+ * @param  self - instance
+ * @param  args - function arguments
+ * @return      "whoAmI" register value
  */
 static PyObject* whoAmI(PyObject* self, PyObject* args) {
     MPU6050_whoAmI(&mpu);
@@ -60,9 +60,9 @@ static PyObject* whoAmI(PyObject* self, PyObject* args) {
 
 /**
  * [Getting a value of temperature registers MPU6050]
- * @param  self [instance]
- * @param  args [function arguments]
- * @return      [combined (high and low) value of temperature register]
+ * @param  self - instance
+ * @param  args - function arguments
+ * @return      combined (high and low) value of temperature register
  */
 static PyObject* getTemp(PyObject* self, PyObject* args) {
     MPU6050_getTemp(&mpu);
@@ -71,9 +71,9 @@ static PyObject* getTemp(PyObject* self, PyObject* args) {
 
 /**
  * [Getting a value of accelerometer registers MPU6050]
- * @param  self [instance]
- * @param  args [function arguments]
- * @return      [list that containing values of accelerometer registers for X, Y and Z axises]
+ * @param  self - instance
+ * @param  args - function arguments
+ * @return      list that containing values of accelerometer registers for X, Y and Z axises
  */
 static PyObject* getAccel(PyObject* self, PyObject* args) {
     MPU6050_getAccel(&mpu);
@@ -86,9 +86,9 @@ static PyObject* getAccel(PyObject* self, PyObject* args) {
 
 /**
  * [Getting a values of gyroscope registers MPU6050]
- * @param  self [instance]
- * @param  args [function arguments]
- * @return      [list that containing values of gyroscope registers for X, Y and Z axises]
+ * @param  self - instance
+ * @param  args - function arguments
+ * @return      list that containing values of gyroscope registers for X, Y and Z axises
  */
 static PyObject* getGyro(PyObject* self, PyObject* args) {
     MPU6050_getGyro(&mpu);
@@ -101,16 +101,16 @@ static PyObject* getGyro(PyObject* self, PyObject* args) {
 
 /**
  * [Computing the temperature in degrees Celsius]
- * @param  self [instance]
- * @param  args [function arguments]
- * @return      [temperature in degrees Celsius]
+ * @param  self - instance
+ * @param  args - function arguments
+ * @return      temperature in degrees Celsius
  */
 static PyObject* countTemp(PyObject* self, PyObject* args) {
     MPU6050_countTemp(&mpu);
     return Py_BuildValue("f", mpu.temp);
 }
 
-static PyMethodDef helloMethods[] = {
+static PyMethodDef mpu6050Methods[] = {
     {"init", (PyCFunction)init, METH_VARARGS, "Initialise and set the settings MPU6050"},
     {"whoAmI", (PyCFunction)whoAmI, METH_VARARGS, "Returning a value of \"whoAmI\" register MPU6050"},
     {"getTemp", (PyCFunction)getTemp, METH_VARARGS, "Getting a value of temperature registers MPU6050"},
@@ -120,14 +120,14 @@ static PyMethodDef helloMethods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-static struct PyModuleDef helloModule = {
+static struct PyModuleDef mpu6050Module = {
     PyModuleDef_HEAD_INIT,
     "mpu6050",
     "",
     -1,
-    helloMethods
+    mpu6050Methods
 };
 
 PyMODINIT_FUNC PyInit_mpu6050(void) {
-    return PyModule_Create(&helloModule);
+    return PyModule_Create(&mpu6050Module);
 }

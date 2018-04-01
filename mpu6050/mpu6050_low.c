@@ -1,4 +1,4 @@
-/* Name: main.c
+/* Name: mpu6050_low.c
  * Author: Zhyhariev Mikhail
  * License: MIT
  */
@@ -8,8 +8,8 @@
 #include <wiringPiI2C.h>
 
 /**
- * [Initialise and set the settings MPU6050]
- * @return  [pointer on device file]
+ * Initialise and set the settings MPU6050
+ * @return  pointer on device file
  */
 int MPU6050_Init(void) {
     int fd = wiringPiI2CSetupInterface(MPU6050, 0x68);
@@ -74,7 +74,7 @@ int MPU6050_Init(void) {
     //Enable data ready interrupt
     wiringPiI2CWriteReg8(fd, INT_ENABLE, 0x00);
 
-    //Slave out, dont care
+    //Slave out, don't care
     wiringPiI2CWriteReg8(fd, I2C_SLV0_DO, 0x00);
     wiringPiI2CWriteReg8(fd, I2C_SLV1_DO, 0x00);
     wiringPiI2CWriteReg8(fd, I2C_SLV2_DO, 0x00);
@@ -100,7 +100,7 @@ int MPU6050_Init(void) {
  * @param mpu6050 - structure that containing all measured variables
  */
 void MPU6050_whoAmI(mpu6050 *mpu6050) {
-    mpu6050->who = wiringPiI2CReadReg16(mpu6050->fd, WHO_AM_I);
+    mpu6050->who = wiringPiI2CReadReg8(mpu6050->fd, WHO_AM_I);
 }
 
 /**

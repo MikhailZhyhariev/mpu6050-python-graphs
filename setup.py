@@ -7,6 +7,6 @@ mpu6050 = Extension('mpu6050',
                      libraries=['wiringPi', 'pthread'])
 
 setup(name = 'mpu6050',
-      version = '1.0',
-      description = 'This is a demo package',
+      version = '1.1',
+      description = 'Module for MPU6050',
       ext_modules = [mpu6050])

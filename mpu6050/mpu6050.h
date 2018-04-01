@@ -15,7 +15,7 @@ typedef struct {
     unsigned char who;
 
     // Combined (high and low) value of temperature register
-    unsigned int temp_reg;
+    int temp_reg;
     // Temperature in degrees Celsius
     float temp;
 
