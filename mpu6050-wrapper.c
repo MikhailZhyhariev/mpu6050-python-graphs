@@ -7,8 +7,8 @@
 #include <wiringPi.h>
 #include "mpu6050/mpu6050.h"
 
-// structure that containing all measured variables
-mpu6050 mpu;
+
+int fd;
 
 /**
  * Making list from array
@@ -16,7 +16,7 @@ mpu6050 mpu;
  * @param  length - array length
  * @return        python list that containing an array values
  */
-static PyObject* _makeList(unsigned int *arr, unsigned char length) {
+static PyObject* _makeList(int *arr, unsigned char length) {
     // Create new Python list
     PyObject* list = PyList_New(0);
 
@@ -33,81 +33,69 @@ static PyObject* _makeList(unsigned int *arr, unsigned char length) {
 
 /**
  * Initialise and set the settings MPU6050
- * @param  self - instance
- * @param  args - function arguments
- * @return        NONE
+ * @param device_name - device name
+ * @param baud_rate   - baud rate
+ * @return            file descriptor
  */
 static PyObject* init(PyObject* self, PyObject* args) {
-    // Initialise wiringPi
-    wiringPiSetup();
-
-    // Initialise and set the settings MPU6050 module. Get MPU6050 file descriptor
-    mpu.fd = MPU6050_Init();
-
+    fd = MPU6050_Init("/dev/ttyS0", 9600);
     Py_RETURN_NONE;
 }
 
 /**
- * [Returning a value of "whoAmI" register MPU6050]
- * @param  self - instance
- * @param  args - function arguments
- * @return      "whoAmI" register value
+ * Getting a value of temperature registers MPU6050
+ * @param fd - file descriptor
+ * @return   temperature register value
  */
 static PyObject* whoAmI(PyObject* self, PyObject* args) {
-    MPU6050_whoAmI(&mpu);
-    return Py_BuildValue("i", mpu.who);
+    int who = MPU6050_whoAmI(fd);
+    return Py_BuildValue("i", who);
 }
 
 /**
- * [Getting a value of temperature registers MPU6050]
+ * Getting a value of temperature registers MPU6050
  * @param  self - instance
  * @param  args - function arguments
  * @return      combined (high and low) value of temperature register
  */
 static PyObject* getTemp(PyObject* self, PyObject* args) {
-    MPU6050_getTemp(&mpu);
-    return Py_BuildValue("i", mpu.temp_reg);
+    int temp_reg = MPU6050_getTemp(fd);
+    return Py_BuildValue("i", temp_reg);
 }
 
 /**
- * [Getting a value of accelerometer registers MPU6050]
+ * Getting a value of accelerometer registers MPU6050
  * @param  self - instance
  * @param  args - function arguments
  * @return      list that containing values of accelerometer registers for X, Y and Z axises
  */
 static PyObject* getAccel(PyObject* self, PyObject* args) {
-    MPU6050_getAccel(&mpu);
-
-    unsigned int values[] = {mpu.accel_x, mpu.accel_y, mpu.accel_z};
-    PyObject* list = _makeList(values, 3);
-
+    int* accel = MPU6050_getAccel(fd);
+    PyObject* list = _makeList(accel, 3);
     return list;
 }
 
 /**
- * [Getting a values of gyroscope registers MPU6050]
+ * Getting a values of gyroscope registers MPU6050
  * @param  self - instance
  * @param  args - function arguments
  * @return      list that containing values of gyroscope registers for X, Y and Z axises
  */
 static PyObject* getGyro(PyObject* self, PyObject* args) {
-    MPU6050_getGyro(&mpu);
-
-    unsigned int values[] = {mpu.gyro_x, mpu.gyro_y, mpu.gyro_z};
-    PyObject* list = _makeList(values, 3);
-
+    int* gyro = MPU6050_getGyro(fd);
+    PyObject* list = _makeList(gyro, 3);
     return list;
 }
 
 /**
- * [Computing the temperature in degrees Celsius]
+ * Computing the temperature in degrees Celsius
  * @param  self - instance
  * @param  args - function arguments
  * @return      temperature in degrees Celsius
  */
 static PyObject* countTemp(PyObject* self, PyObject* args) {
-    MPU6050_countTemp(&mpu);
-    return Py_BuildValue("f", mpu.temp);
+    float temp = MPU6050_countTemp(fd);
+    return Py_BuildValue("f", temp);
 }
 
 static PyMethodDef mpu6050Methods[] = {

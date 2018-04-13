@@ -3,6 +3,7 @@ from distutils.core import setup, Extension
 mpu6050 = Extension('mpu6050',
                      sources = ['mpu6050/mpu6050_low.c',
                                 'mpu6050/mpu6050_high.c',
+                                'mpu6050/mpu6050_uart.c',
                                 'mpu6050-wrapper.c'],
                      libraries=['wiringPi', 'pthread'])
 

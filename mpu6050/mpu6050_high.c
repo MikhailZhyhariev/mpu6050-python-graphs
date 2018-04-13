@@ -3,16 +3,18 @@
  * License: MIT
  */
 
+#include <stdlib.h>
 #include "mpu6050.h"
 
 /**
  * Computing the temperature in degrees Celsius
- * @param mpu6050 - structure that containing all measured variables
+ * @return      temperature in degrees Celsius
  */
-void MPU6050_countTemp(mpu6050 *mpu6050) {
-    // getting the values of temp_high and temp_l registers
-    MPU6050_getTemp(mpu6050);
+float MPU6050_countTemp(int fd) {
+    // Getting the values of the temperature register
+    int temp_reg = MPU6050_getTemp(fd);
+    if (temp_reg == -33000) return -273;
 
-    // computing the temperature in degrees Celsius
-    mpu6050->temp = (mpu6050->temp_reg / 340) + 36.53;
+    // Return the temperature in degrees Celsius
+    return temp_reg / 340 + 36.53;
 }

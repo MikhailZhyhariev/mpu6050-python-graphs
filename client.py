@@ -2,7 +2,7 @@ from time import sleep
 import socket
 import mpu6050
 
-mpu6050.init()
+fd = mpu6050.init()
 
 with socket.create_connection(("192.168.1.101", 10001)) as sock:
     index = 0
@@ -12,5 +12,3 @@ with socket.create_connection(("192.168.1.101", 10001)) as sock:
 
         index += 1
         print('Sending data...')
-
-        sleep(0.25)
